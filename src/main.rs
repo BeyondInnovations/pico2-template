@@ -6,6 +6,7 @@ use embassy_rp as hal;
 use embassy_executor::Spawner;
 use embassy_rp::block::ImageDef;
 use embassy_time::Timer;
+use embassy_time::Duration;
 {% else -%}
 use rp235x_hal as hal;
 use hal::block::ImageDef;
@@ -16,6 +17,7 @@ use {panic_probe as _};
 {% if defmt -%}
 // Defmt Logging
 use defmt_rtt as _;
+use defmt::*;
 {% endif %}
 /// Tell the Boot ROM about our application
 #[unsafe(link_section = ".start_block")]
@@ -30,10 +32,13 @@ const XTAL_FREQ_HZ: u32 = 12_000_000u32;
 {% if hal == "embassy" -%}
 #[embassy_executor::main]
 async fn main(_spawner: Spawner) {
-    let p = embassy_rp::init(Default::default());
+    let _p = embassy_rp::init(Default::default());
+    info!("Starting check project!");
 
+    let delay = Duration::from_millis(500);
     loop{
-        Timer::after_millis(100).await;
+        info!("Going to wait for {}: delay!", delay.as_millis());
+        Timer::after(delay).await;
     }   
 }
 {% else -%}
