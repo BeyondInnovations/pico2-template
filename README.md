@@ -34,6 +34,10 @@ cargo generate --git https://github.com/BeyondInnovations/pico2-template.git
 cargo build
 cargo embed
 
+# use release build
+cargo build --release
+cargo embed --release
+
 # without debug probe
 cargo run --release
 ```
